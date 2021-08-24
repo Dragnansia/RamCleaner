@@ -2,8 +2,8 @@
 Minecraft mod for clean ram on minecraft and os
 
 # Commands
-See ram data `/ram info`
-Clear ram game `/ram clean`
+See ram data `/ram info`  
+Clear ram game `/ram clean`  
 Clear ram os `/ram cleanos`
 
 # Warnings
