@@ -12,10 +12,10 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 
 group = 'net.dragnansia'
-version = '1.0'
+version = '0.0.1'
 
 java {
-    archivesBaseName = 'clearram'
+    archivesBaseName = 'ramcleaner'
     toolchain.languageVersion = JavaLanguageVersion.of(8)
 }
 
@@ -54,7 +54,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                clearram {
+                ramcleaner {
                     source sourceSets.main
                 }
             }
@@ -76,7 +76,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                clearram {
+                ramcleaner {
                     source sourceSets.main
                 }
             }
@@ -98,10 +98,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'clearram', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'ramcleaner', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                clearram {
+                ramcleaner {
                     source sourceSets.main
                 }
             }
@@ -145,8 +145,8 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "clearram",
-                "Specification-Vendor"    : "Romuald-auc",
+                "Specification-Title"     : "ramcleaner",
+                "Specification-Vendor"    : "Dragnansia",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
