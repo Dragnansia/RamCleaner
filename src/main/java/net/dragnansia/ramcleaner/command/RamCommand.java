@@ -45,48 +45,79 @@ public class RamCommand {
         dispatcher.register(Commands.literal("ram")
             .requires(commandSource -> commandSource.hasPermissionLevel(2))
             .then(Commands.literal("clean")
-                .executes(context -> ClearRam(context.getSource()))
-            )
-            .then(Commands.literal("cleanos")
-                .executes(context -> ClearOSRam(context.getSource()))
+                .then(Commands.literal("os")
+                    .executes(context -> ClearOSRam(context.getSource()))
+                )
+                .then(Commands.literal("game")
+                    .executes(context -> ClearRam(context.getSource()))
+                )
             )
             .then(Commands.literal("info")
-                .executes(context -> RamUsage(context.getSource()))
+                .then(Commands.literal("os")
+                    .executes(context -> RamOSUsage(context.getSource()))
+                )
+                .then(Commands.literal("game")
+                    .executes(context -> RamGameUsage(context.getSource()))
+                )
             )
+            .executes(context -> RamGameUsage(context.getSource()))
         );
     }
 
     private static int ClearRam(CommandSource source) {
-        Runtime runtime = Runtime.getRuntime();
-
-        long notAllocated = runtime.maxMemory() - runtime.totalMemory();
-        long freePct = (runtime.freeMemory() + notAllocated) * 100 / runtime.maxMemory();
-
-        if (freePct >= 10) {
-            source.sendErrorMessage(
-                new StringTextComponent("This server have more than " + freePct + "% of ram not used")
-            );
-            return 0;
-        }
-
         System.gc();
+        StringTextComponent text =
+            new StringTextComponent(
+                "Ram is normally clean.\n" +
+                "No used this command to many time"
+            );
+
+        source.sendFeedback(text, true);
         return 0;
     }
 
     private static int ClearOSRam(CommandSource source) {
-        if (currentOS == CurrentOS.Unknown) {
-            source.sendErrorMessage(
-                new StringTextComponent("The current os used is not determined")
-            );
-            return 0;
-        }
-
         // create function for clear ram
+        switch (currentOS) {
+            case Linux:
+                break;
+            case Windows:
+                break;
+            case MacOs:
+                break;
+            case Unknown:
+                source.sendErrorMessage(
+                    new StringTextComponent("The current os used is not determined")
+                );
+                break;
+        }
 
         return 0;
     }
 
-    private static int RamUsage(CommandSource source) {
+    private static int RamGameUsage(CommandSource source) {
+        Runtime runtime = Runtime.getRuntime();
+
+        long max = runtime.maxMemory() / 1048576;
+        long total = runtime.totalMemory() / 1048576;
+        long free = runtime.freeMemory() / 1048576;
+        long totalFree = (free + (max - total));
+
+        StringTextComponent text =
+            new StringTextComponent(
+                "\n" +
+                "| ------- Game ------- |\n" +
+                "| Free: " + totalFree + " Mio\n" +
+                "| Used: " + (max - totalFree) + " Mio\n" +
+                "| Total: " + total + " Mio\n" +
+                "| Pct Used: " + ((max - totalFree) * 100 / max) + "%"
+            );
+
+        source.sendFeedback(text, true);
+        return 0;
+    }
+
+    private static int RamOSUsage(CommandSource source) {
         OperatingSystemMXBean mxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
         long total = mxBean.getTotalPhysicalMemorySize() / 1048576;
@@ -96,10 +127,12 @@ public class RamCommand {
 
         StringTextComponent text =
             new StringTextComponent(
-                "| Free:     " + free + " Mio" +
-                    "\n| Used:     " + used + " Mio" +
-                    "\n| Total:    " + total + " Mio" +
-                    "\n| Pct Used: " + pct + "%"
+                "\n" +
+                "| ------- Os ------- |\n" +
+                "| Free: " + free + " Mio\n" +
+                "| Used: " + used + " Mio\n" +
+                "| Total: " + total + " Mio\n" +
+                "| Pct Used: " + pct + "%"
             );
 
         source.sendFeedback(text, true);
