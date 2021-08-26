@@ -3,6 +3,7 @@ package net.dragnansia.ramcleaner.command;
 import com.mojang.brigadier.CommandDispatcher;
 
 import com.sun.management.OperatingSystemMXBean;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.Commands;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.StringTextComponent;
@@ -68,8 +69,7 @@ public class RamCommand {
         System.gc();
         StringTextComponent text =
             new StringTextComponent(
-                "Ram is normally clean.\n" +
-                "No used this command to many time"
+                I18n.format("ramcleaner.command.game.clear")
             );
 
         source.sendFeedback(text, true);
@@ -87,7 +87,7 @@ public class RamCommand {
                 break;
             case Unknown:
                 source.sendErrorMessage(
-                    new StringTextComponent("The current os used is not determined")
+                    new StringTextComponent(I18n.format("command.ramcleaner.os.error"))
                 );
                 break;
         }
@@ -103,14 +103,19 @@ public class RamCommand {
         long free = runtime.freeMemory() / 1048576;
         long totalFree = (free + (max - total));
 
+        String f = I18n.format("ramcleaner.command.game.free");
+        String u = I18n.format("ramcleaner.command.game.used");
+        String t = I18n.format("ramcleaner.command.game.total");
+        String pu = I18n.format("ramcleaner.command.game.pct_used");
+
         StringTextComponent text =
             new StringTextComponent(
                 "\n" +
-                "| ------- Game ------- |\n" +
-                "| Free: " + totalFree + " Mio\n" +
-                "| Used: " + (max - totalFree) + " Mio\n" +
-                "| Total: " + total + " Mio\n" +
-                "| Pct Used: " + ((max - totalFree) * 100 / max) + "%"
+                "| ------- Minecraft ------- |\n" +
+                "| " + f + ": " + totalFree + " Mio\n" +
+                "| " + u + ": " + (max - totalFree) + " Mio\n" +
+                "| " + t + ": " + total + " Mio\n" +
+                "| " + pu + ": " + ((max - totalFree) * 100 / max) + "%"
             );
 
         source.sendFeedback(text, true);
@@ -125,14 +130,19 @@ public class RamCommand {
         long used = total - free;
         long pct = used * 100 / total;
 
+        String f = I18n.format("ramcleaner.command.game.free");
+        String u = I18n.format("ramcleaner.command.game.used");
+        String t = I18n.format("ramcleaner.command.game.total");
+        String pu = I18n.format("ramcleaner.command.game.pct_used");
+
         StringTextComponent text =
             new StringTextComponent(
                 "\n" +
-                "| ------- Os ------- |\n" +
-                "| Free: " + free + " Mio\n" +
-                "| Used: " + used + " Mio\n" +
-                "| Total: " + total + " Mio\n" +
-                "| Pct Used: " + pct + "%"
+                "| ------- OS ------- |\n" +
+                "| " + f + ": " + total + " Mio\n" +
+                "| " + u + ": " + used + " Mio\n" +
+                "| " + t + ": " + total + " Mio\n" +
+                "| " + pu + ": " + pct + "%"
             );
 
         source.sendFeedback(text, true);
