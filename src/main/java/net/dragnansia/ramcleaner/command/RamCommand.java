@@ -11,7 +11,7 @@ import java.lang.management.ManagementFactory;
 
 enum CurrentOS {
     Linux, Windows, MacOs, Unknown
-};
+}
 
 public class RamCommand {
 

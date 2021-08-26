@@ -1,5 +1,7 @@
 package net.dragnansia.ramcleaner;
 
+import net.dragnansia.ramcleaner.keyboard.KeyboardBind;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,12 +18,15 @@ import org.apache.logging.log4j.Logger;
 public class RamCleaner {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private KeyboardBind keyboardBind;
 
     public RamCleaner() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+
+        keyboardBind = new KeyboardBind();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -33,6 +38,11 @@ public class RamCleaner {
     private void enqueueIMC(final InterModEnqueueEvent event) {}
 
     private void processIMC(final InterModProcessEvent event) {}
+
+    @SubscribeEvent
+    public void OnEvent(InputEvent.KeyInputEvent event) {
+        keyboardBind.onEvent(event);
+    }
 
     @SubscribeEvent
     public void serverStarting(FMLServerStartingEvent event) {
