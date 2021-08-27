@@ -2,100 +2,48 @@ package net.dragnansia.ramcleaner.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 
-import com.sun.management.OperatingSystemMXBean;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.Commands;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.StringTextComponent;
 
-import java.lang.management.ManagementFactory;
-
-enum CurrentOS {
-    Linux, Windows, MacOs, Unknown
-}
 
 public class RamCommand {
 
-    private static CurrentOS currentOS;
-
     private RamCommand() {}
 
-    private static void FindCurrentOs() {
-        String os = System.getProperty("os.name").toLowerCase();
-        currentOS = IsWindow(os) ? CurrentOS.Windows
-            : IsUnix(os) ? CurrentOS.Linux
-            : IsMac(os) ? CurrentOS.MacOs
-            : CurrentOS.Unknown;
-    }
-
-    private static boolean IsUnix(String str) {
-        return str.contains("nix") || str.contains("nux") || str.contains("aix");
-    }
-
-    private static boolean IsMac(String str) {
-        return str.contains("mac");
-    }
-
-    private static boolean IsWindow(String str) {
-        return str.contains("window");
-    }
-
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        FindCurrentOs();
-
         dispatcher.register(Commands.literal("ram")
             .requires(commandSource -> commandSource.hasPermissionLevel(2))
             .then(Commands.literal("clean")
-                .then(Commands.literal("os")
-                    .executes(context -> ClearOSRam(context.getSource()))
-                )
-                .then(Commands.literal("game")
-                    .executes(context -> ClearRam(context.getSource()))
-                )
+                .executes(context -> ClearRam(context.getSource()))
             )
             .then(Commands.literal("info")
-                .then(Commands.literal("os")
-                    .executes(context -> RamOSUsage(context.getSource()))
-                )
-                .then(Commands.literal("game")
-                    .executes(context -> RamGameUsage(context.getSource()))
-                )
+                .executes(context -> RamUsage(context.getSource()))
             )
-            .executes(context -> RamGameUsage(context.getSource()))
+            .executes(context -> RamUsage(context.getSource()))
         );
     }
 
     private static int ClearRam(CommandSource source) {
+        Runtime runtime = Runtime.getRuntime();
+
+        long ramBefore = runtime.totalMemory() / 1048576;
         System.gc();
+        long ramAfter = runtime.totalMemory() / 1048576;
+
         StringTextComponent text =
             new StringTextComponent(
-                I18n.format("ramcleaner.command.game.clear")
+                I18n.format("ramcleaner.command.game.clear") +
+                (ramBefore - ramAfter) + "Mib." +
+                I18n.format("ramcleaner.command.game.clear_2")
             );
 
         source.sendFeedback(text, true);
         return 0;
     }
 
-    private static int ClearOSRam(CommandSource source) {
-        // create function for clear ram
-        switch (currentOS) {
-            case Linux:
-                break;
-            case Windows:
-                break;
-            case MacOs:
-                break;
-            case Unknown:
-                source.sendErrorMessage(
-                    new StringTextComponent(I18n.format("command.ramcleaner.os.error"))
-                );
-                break;
-        }
-
-        return 0;
-    }
-
-    private static int RamGameUsage(CommandSource source) {
+    private static int RamUsage(CommandSource source) {
         Runtime runtime = Runtime.getRuntime();
 
         long max = runtime.maxMemory() / 1048576;
@@ -116,33 +64,6 @@ public class RamCommand {
                 "| " + u + ": " + (max - totalFree) + " Mio\n" +
                 "| " + t + ": " + total + " Mio\n" +
                 "| " + pu + ": " + ((max - totalFree) * 100 / max) + "%"
-            );
-
-        source.sendFeedback(text, true);
-        return 0;
-    }
-
-    private static int RamOSUsage(CommandSource source) {
-        OperatingSystemMXBean mxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-
-        long total = mxBean.getTotalPhysicalMemorySize() / 1048576;
-        long free = mxBean.getFreePhysicalMemorySize() / 1048576;
-        long used = total - free;
-        long pct = used * 100 / total;
-
-        String f = I18n.format("ramcleaner.command.game.free");
-        String u = I18n.format("ramcleaner.command.game.used");
-        String t = I18n.format("ramcleaner.command.game.total");
-        String pu = I18n.format("ramcleaner.command.game.pct_used");
-
-        StringTextComponent text =
-            new StringTextComponent(
-                "\n" +
-                "| ------- OS ------- |\n" +
-                "| " + f + ": " + total + " Mio\n" +
-                "| " + u + ": " + used + " Mio\n" +
-                "| " + t + ": " + total + " Mio\n" +
-                "| " + pu + ": " + pct + "%"
             );
 
         source.sendFeedback(text, true);

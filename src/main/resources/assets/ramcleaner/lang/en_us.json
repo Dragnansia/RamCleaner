@@ -1,5 +1,6 @@
 {
-  "ramcleaner.command.game.clear": "Ram is clean.\nNo used this command to many time",
+  "ramcleaner.command.game.clear": "Ram is clean: ",
+  "ramcleaner.command.game.clear_2": "\nNo used this command to many time",
   "ramcleaner.command.game.free": "Free",
   "ramcleaner.command.game.used": "Used",
   "ramcleaner.command.game.total": "Total",

@@ -22,8 +22,14 @@ public class KeyboardBind {
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
         if (keyBinding.isPressed()) {
+            Runtime runtime = Runtime.getRuntime();
+
+            long ramBefore = runtime.totalMemory() / 1048576;
             System.gc();
+            long ramAfter = runtime.totalMemory() / 1048576;
+
             String text = I18n.format("ramcleaner.command.game.clear");
+            text += (ramBefore - ramAfter) + "Mib." + I18n.format("ramcleaner.command.game.clear_2");
 
             assert Minecraft.getInstance().player != null;
             Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(
