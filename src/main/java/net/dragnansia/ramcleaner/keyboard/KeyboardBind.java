@@ -3,10 +3,14 @@ package net.dragnansia.ramcleaner.keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.lwjgl.glfw.GLFW;
 
 public class KeyboardBind {
 
@@ -15,7 +19,14 @@ public class KeyboardBind {
     public KeyboardBind() {
         String bindingName = I18n.format("ramcleaner.settings.clear");
 
-        keyBinding = new KeyBinding(bindingName, -1, "RamCleaner");
+        keyBinding = new KeyBinding(
+            bindingName,
+            KeyConflictContext.UNIVERSAL,
+            KeyModifier.ALT,
+            InputMappings.Type.KEYSYM,
+            GLFW.GLFW_KEY_F4,
+            "RamCleaner"
+        );
         ClientRegistry.registerKeyBinding(keyBinding);
     }
 
