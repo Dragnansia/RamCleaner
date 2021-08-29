@@ -93,6 +93,8 @@ public class KeyboardBind {
         }
 
         if (openMenu.isPressed() && Minecraft.getInstance().world != null) {
+            RamMenu ramMenu = new RamMenu(openMenu);
+            Minecraft.getInstance().displayGuiScreen(ramMenu);
         }
     }
 }
