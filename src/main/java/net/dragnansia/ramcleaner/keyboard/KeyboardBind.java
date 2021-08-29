@@ -1,5 +1,6 @@
 package net.dragnansia.ramcleaner.keyboard;
 
+import net.dragnansia.ramcleaner.gui.RamMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
@@ -12,27 +13,54 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
+import static net.dragnansia.ramcleaner.command.RamCommand.RamMessage;
+
 public class KeyboardBind {
 
-    private KeyBinding keyBinding;
+    private final KeyBinding cleanRam;
+    private final KeyBinding seeInformation;
+    private final KeyBinding openMenu;
 
     public KeyboardBind() {
-        String bindingName = I18n.format("ramcleaner.settings.clear");
+        String cleanRamName = I18n.format("ramcleaner.settings.clear");
+        String seeInformationName = I18n.format("ramcleaner.settings.info");
+        String openMenuName = I18n.format("ramcleaner.settings.menu");
 
-        keyBinding = new KeyBinding(
-            bindingName,
+        cleanRam = new KeyBinding(
+            cleanRamName,
             KeyConflictContext.UNIVERSAL,
             KeyModifier.ALT,
             InputMappings.Type.KEYSYM,
             GLFW.GLFW_KEY_F4,
             "RamCleaner"
         );
-        ClientRegistry.registerKeyBinding(keyBinding);
+
+        seeInformation = new KeyBinding(
+            seeInformationName,
+            KeyConflictContext.UNIVERSAL,
+            KeyModifier.NONE,
+            InputMappings.Type.KEYSYM,
+            -1,
+            "RamCleaner"
+        );
+
+        openMenu = new KeyBinding(
+            openMenuName,
+            KeyConflictContext.UNIVERSAL,
+            KeyModifier.NONE,
+            InputMappings.Type.KEYSYM,
+            -1,
+            "RamCleaner"
+        );
+
+        ClientRegistry.registerKeyBinding(openMenu);
+        ClientRegistry.registerKeyBinding(cleanRam);
+        ClientRegistry.registerKeyBinding(seeInformation);
     }
 
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
-        if (keyBinding.isPressed()) {
+        if (cleanRam.isPressed()) {
             Runtime runtime = Runtime.getRuntime();
 
             long ramBefore = runtime.totalMemory() / 1048576;
@@ -46,6 +74,25 @@ public class KeyboardBind {
             Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(
                 ITextComponent.getTextComponentOrEmpty(text)
             );
+        }
+
+        if (seeInformation.isPressed()) {
+            Runtime runtime = Runtime.getRuntime();
+
+            long max = runtime.maxMemory() / 1048576;
+            long total = runtime.totalMemory() / 1048576;
+            long free = runtime.freeMemory() / 1048576;
+            long totalFree = (free + (max - total));
+
+            String text = RamMessage(total, max, totalFree).getText();
+
+            assert Minecraft.getInstance().player != null;
+            Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(
+                ITextComponent.getTextComponentOrEmpty(text)
+            );
+        }
+
+        if (openMenu.isPressed() && Minecraft.getInstance().world != null) {
         }
     }
 }

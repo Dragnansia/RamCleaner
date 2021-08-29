@@ -7,5 +7,9 @@
   "ramcleaner.command.game.pct_used": "Pct Used",
   "ramcleaner.command.os.error": "The current os used is not determined",
 
-  "ramcleaner.settings.clear": "Clean game ram"
+  "ramcleaner.settings.clear": "Clean game ram",
+  "ramcleaner.settings.info": "See info ram",
+  "ramcleaner.settings.menu": "Open ram menu",
+
+  "ramcleaner.menu.clear": "Clear ram"
 }

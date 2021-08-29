@@ -51,22 +51,25 @@ public class RamCommand {
         long free = runtime.freeMemory() / 1048576;
         long totalFree = (free + (max - total));
 
+        StringTextComponent text = RamMessage(total, max, totalFree);
+
+        source.sendFeedback(text, true);
+        return 0;
+    }
+
+    public static StringTextComponent RamMessage(long total, long max, long totalFree) {
         String f = I18n.format("ramcleaner.command.game.free");
         String u = I18n.format("ramcleaner.command.game.used");
         String t = I18n.format("ramcleaner.command.game.total");
         String pu = I18n.format("ramcleaner.command.game.pct_used");
 
-        StringTextComponent text =
-            new StringTextComponent(
-                "\n" +
-                "| ------- Minecraft ------- |\n" +
-                "| " + f + ": " + totalFree + " Mio\n" +
-                "| " + u + ": " + (max - totalFree) + " Mio\n" +
-                "| " + t + ": " + total + " Mio\n" +
-                "| " + pu + ": " + ((max - totalFree) * 100 / max) + "%"
-            );
-
-        source.sendFeedback(text, true);
-        return 0;
+        return new StringTextComponent(
+            "\n" +
+            "| ------- Minecraft ------- |\n" +
+            "| " + f + ": " + totalFree + " Mio\n" +
+            "| " + u + ": " + (max - totalFree) + " Mio\n" +
+            "| " + t + ": " + total + " Mio\n" +
+            "| " + pu + ": " + ((max - totalFree) * 100 / max) + "%"
+        );
     }
 }

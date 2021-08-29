@@ -7,5 +7,7 @@
   "ramcleaner.command.game.pct_used": "Pct utilisé",
   "ramcleaner.command.os.error": "L'os utilisé n'a pas pu être trouvé",
 
-  "ramcleaner.settings.clear": "Nettoyer la ram du jeu"
+  "ramcleaner.settings.clear": "Nettoyer la ram du jeu",
+  "ramcleaner.settings.info": "Voir les infos de la ram",
+  "ramcleaner.settings.menu": "Ouvrir le menu de la ram"
 }
