@@ -1,0 +1,15 @@
+{
+  "ramcleaner.command.game.clear": "La mémoire est nettoyée: ",
+  "ramcleaner.command.game.clear_2": "\nN'utilise pas cette méthode trop souvent",
+  "ramcleaner.command.game.free": "Libre",
+  "ramcleaner.command.game.used": "Utilisé",
+  "ramcleaner.command.game.total": "Total",
+  "ramcleaner.command.game.pct_used": "Pct libre",
+  "ramcleaner.command.os.error": "L'os utilisé n'a pas pu être trouvé",
+
+  "ramcleaner.settings.clear": "Nettoyer la ram du jeu",
+  "ramcleaner.settings.info": "Voir les infos de la ram",
+  "ramcleaner.settings.menu": "Ouvrir le menu de la ram",
+
+  "ramcleaner.menu.clear": "Nettoyer ram"
+}

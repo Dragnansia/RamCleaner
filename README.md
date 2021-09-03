@@ -1,2 +1,10 @@
 # RamCleaner
-Minecraft mod for clean ram with OS dependency without use System.gc()
+Minecraft mod for clean ram on minecraft
+
+# Commands
+- `/ram info game`
+- `/ram clean game`
+
+# Warnings
+Don't use this mod on server just on client.
+Use this mod only if you have bad performance on game.

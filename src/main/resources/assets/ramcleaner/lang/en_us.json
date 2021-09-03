@@ -1,0 +1,15 @@
+{
+  "ramcleaner.command.game.clear": "Ram is clean: ",
+  "ramcleaner.command.game.clear_2": "\nNo used this command to many time",
+  "ramcleaner.command.game.free": "Free",
+  "ramcleaner.command.game.used": "Used",
+  "ramcleaner.command.game.total": "Total",
+  "ramcleaner.command.game.pct_used": "Pct Free",
+  "ramcleaner.command.os.error": "The current os used is not determined",
+
+  "ramcleaner.settings.clear": "Clean game ram",
+  "ramcleaner.settings.info": "See info ram",
+  "ramcleaner.settings.menu": "Open ram menu",
+
+  "ramcleaner.menu.clear": "Clear ram"
+}
